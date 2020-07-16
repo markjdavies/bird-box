@@ -1,0 +1,9 @@
+version: "2.1"
+
+services:
+  camera:
+      labels:
+        io.balena.features.supervisor-api: '1'
+    build:
+      dockerfile: Dockerfile
+    container_name: birdbox
