@@ -7,4 +7,8 @@ services:
     build:
       context: ./camera
       dockerfile: Dockerfile
-    container_name: birdbox
+    container_name: birdbox-camera
+    environment:
+      - LD_LIBRARY_PATH=/opt/vc/lib
+    volumes:
+      - /opt/vc:/opt/vc
