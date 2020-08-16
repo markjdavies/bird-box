@@ -5,12 +5,11 @@ services:
     labels:
       io.balena.features.supervisor-api: "1"
       io.balena.features.kernel-modules: "1"
-    build:
-      context: ./camera
-      dockerfile: Dockerfile
     container_name: birdbox-camera
     privileged: true
-    environment:
-      - LD_LIBRARY_PATH=/opt/vc/lib
-    # volumes:
-    #   - /opt/vc:/opt/vc
+    build:
+      context: ./camera
+    volumes:
+      - pictures:/data
+volumes:
+  pictures:
