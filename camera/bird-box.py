@@ -9,5 +9,5 @@ with picamera.PiCamera() as camera:
     time.sleep(2)
     camera.capture('/data/image.jpg')
 
-print 'Picture taken'
+print('Picture taken')
 time.sleep(10)
