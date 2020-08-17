@@ -11,5 +11,7 @@ services:
       context: ./camera
     volumes:
       - pictures:/data
+    ports:
+      - 80:80
 volumes:
   pictures:
