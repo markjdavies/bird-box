@@ -4,7 +4,14 @@ services:
   camera:
     labels:
       io.balena.features.supervisor-api: "1"
+      io.balena.features.kernel-modules: "1"
+    container_name: birdbox-camera
+    privileged: true
     build:
       context: ./camera
-      dockerfile: Dockerfile
-    container_name: birdbox
+    volumes:
+      - pictures:/data
+    ports:
+      - 80:80
+volumes:
+  pictures:
