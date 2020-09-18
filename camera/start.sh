@@ -6,7 +6,7 @@ then
     python -m http.server 80
 else
     echo Starting YouTube stream
-    raspivid -o - -t 0 -w 1280 -h 720 -fps 25 -b 4000000 -g 50 | \
+    raspivid -o - -t 0 -w ${WIDTH:=1280} -h ${HEIGHT:=720} -fps ${FPS:=25} -b ${BITRATE:=4000000} -g ${INTRA:=50} | \
         ffmpeg \
             -re \
             -ar 44100 \
