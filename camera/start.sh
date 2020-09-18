@@ -7,7 +7,7 @@ then
 else
     echo Starting YouTube stream
     raspivid -o - -t 0 -w ${WIDTH:=1280} -h ${HEIGHT:=720} -fps ${FPS:=25} -b ${BITRATE:=4000000} -g ${INTRA:=50} | \
-        ffmpeg -use_wallclock_as_timestamps 1 \
+        ffmpeg -i anullsrc \
             -re \
             -ar 44100 \
             -ac 2 \
