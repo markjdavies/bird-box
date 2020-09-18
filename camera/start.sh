@@ -7,7 +7,8 @@ then
 else
     echo Starting YouTube stream
     raspivid -o - -t 0 -w ${WIDTH:=1280} -h ${HEIGHT:=720} -fps ${FPS:=25} -b ${BITRATE:=4000000} -g ${INTRA:=50} | \
-        ffmpeg -i anullsrc=r=48000:cl=mono \
+        ffmpeg \
+            -f lavfi -i anullsrc=r=48000:cl=mono \
             -re \
             -ar 44100 \
             -ac 2 \
