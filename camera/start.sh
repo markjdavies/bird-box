@@ -5,8 +5,24 @@ then
     cd /data
     python -m http.server 80
 else
+    echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
+    echo Region of interest: $ROI
     echo Starting YouTube stream
-    raspivid -o - -t 0 -w ${WIDTH:=1280} -h ${HEIGHT:=720} -fps ${FPS:=25} -b ${BITRATE:=4000000} -g ${INTRA:=50} | \
+    raspivid -o - -t 0 \
+            -w ${WIDTH:=1280} \
+            -h ${HEIGHT:=720} \
+            -fps ${FPS:=25} \
+            -b ${BITRATE:=8000000} \
+            -g ${INTRA:=50} \
+            --brightness $BRIGHTNESS \
+            --contrast $CONTRAST \
+            --ISO $ISO \
+            --ev $EV \
+            --exposure ${EXPOSURE:=night} \
+            --awb ${AWB:=greyworld} \
+            --rotation ${ROTATION:=0} \
+            --roi ${ROI:=0,0,1,1} \
+        | \
         ffmpeg \
             -fflags +genpts \
             -f lavfi -i anullsrc=r=48000:cl=mono \
@@ -18,6 +34,7 @@ else
             -ac 2 \
             -i /dev/zero \
             -f h264 \
+            -thread_queue_size ${THREAD_QUEUE_SIZE:=512} \
             -i - \
             -vcodec \
         copy \
