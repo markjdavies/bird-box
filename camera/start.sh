@@ -12,7 +12,7 @@ else
             -w ${WIDTH:=1280} \
             -h ${HEIGHT:=720} \
             -fps ${FPS:=25} \
-            -b ${BITRATE:=8000000} \
+            -b ${BITRATE:=3000000} \
             -g ${INTRA:=50} \
             --brightness $BRIGHTNESS \
             --contrast $CONTRAST \
