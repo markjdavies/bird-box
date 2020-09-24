@@ -11,9 +11,9 @@ else
     raspivid -o - -t 0 \
             -w ${WIDTH:=1280} \
             -h ${HEIGHT:=720} \
-            -fps ${FPS:=25} \
+            -fps ${FPS:=24} \
             -b ${BITRATE:=3000000} \
-            -g ${INTRA:=50} \
+            -g ${INTRA:=48} \
             --brightness $BRIGHTNESS \
             --contrast $CONTRAST \
             --ISO $ISO \
@@ -34,7 +34,7 @@ else
             -ac 2 \
             -i /dev/zero \
             -f h264 \
-            -thread_queue_size ${THREAD_QUEUE_SIZE:=512} \
+            -thread_queue_size ${THREAD_QUEUE_SIZE:=1024} \
             -i - \
             -vcodec \
         copy \
