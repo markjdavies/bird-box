@@ -13,5 +13,6 @@ services:
       - pictures:/data
     ports:
       - 80:80
+    restart: unless-stopped
 volumes:
   pictures:
