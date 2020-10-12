@@ -1,3 +1,7 @@
+# Set the Pi Zero ACT LED trigger to 'none'.
+echo none | tee /sys/class/leds/led0/trigger
+# Turn off the Pi Zero ACT LED.
+echo 1 | tee /sys/class/leds/led0/brightness
 
 if [$MODE=='STILL']
 then
