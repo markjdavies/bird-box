@@ -36,12 +36,11 @@ else
             -f h264 \
             -thread_queue_size ${THREAD_QUEUE_SIZE:=1024} \
             -i - \
-            -vcodec \
-        copy \
+            -vcodec copy \
             -acodec aac \
             -ab 128k \
             -g 50 \
             -strict experimental \
-            -f \
-        flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_KEY
+            -f flv \
+            rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_KEY
 fi
