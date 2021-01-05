@@ -26,6 +26,7 @@ else
     | \
     ffmpeg -re \
         -ar 44100 -ac 2 -acodec pcm_s16le -f s16le -ac 2 -i /dev/zero \
+        -re \
         -f h264 \
         -thread_queue_size ${THREAD_QUEUE_SIZE:=1024} \
         -loglevel debug \
@@ -34,6 +35,7 @@ else
         -acodec aac \
         -ab 128k \
         -g 50 \
-        -strict experimental \
+        -strict normal \
+        -t ${STREAM_LENGTH:=05:59:00} \
         -f flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_KEY
 fi
