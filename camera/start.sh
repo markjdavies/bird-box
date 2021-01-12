@@ -48,8 +48,8 @@ do
             -strict normal \
             -t $nextBreakSeconds \
             -f flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_KEY
+        echo Streaming finished
     fi
-
 done
 
 #  \
