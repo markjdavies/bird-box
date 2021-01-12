@@ -3,7 +3,7 @@ do
     echo Taking still picture
     modprobe v4l2_common && python bird-box.py
 
-    nextBreakHoursPart=$(((6 - ($(date +%H) % 6) - 2) * 3600))
+    nextBreakHoursPart=$(((6 - ($(date +%H) % 6) - 1) * 3600))
     nextBreakMinutesPart=$(((60 - ($(date +%M))) * 60 - 120))
     nextBreakSeconds=$((nextBreakHoursPart + nextBreakMinutesPart))
 
@@ -40,7 +40,6 @@ do
             -re \
             -f h264 \
             -thread_queue_size ${THREAD_QUEUE_SIZE:=1024} \
-            -loglevel debug \
             -i - \
             -vcodec copy \
             -acodec aac \
