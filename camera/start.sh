@@ -6,6 +6,7 @@ do
     nextBreakHoursPart=$(((6 - ($(date +%H) % 6) - 1) * 3600))
     nextBreakMinutesPart=$(((60 - ($(date +%M))) * 60 - 120))
     nextBreakSeconds=$((nextBreakHoursPart + nextBreakMinutesPart))
+    nextBreakMilliseconds=$((nextBreakSeconds * 1000))
 
     echo 'Minutes until next break:' $((nextBreakSeconds / 60))
 
@@ -18,7 +19,7 @@ do
         echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
         echo Region of interest: $ROI
         echo Starting YouTube stream
-        raspivid -o - -t 0 \
+        raspivid -o - -t $nextBreakMilliseconds \
             -n \
             -ih \
             -w ${WIDTH:=1280} \
