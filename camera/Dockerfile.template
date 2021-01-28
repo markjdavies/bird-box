@@ -2,7 +2,8 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-python
 
 RUN apt-get update && \
     apt-get upgrade && \
-    apt install ffmpeg
+    apt install ffmpeg && \
+    apt-get install jq
 
 # pip install python deps from requirements.txt
 # For caching until requirements.txt changes

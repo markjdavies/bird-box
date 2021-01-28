@@ -10,9 +10,28 @@ services:
     build:
       context: ./camera
     volumes:
-      - pictures:/data
+      - pics:/pics
+      - schedule:/schedule
+      - auth:/auth
     ports:
       - 80:80
     restart: unless-stopped
+  syncthing:
+    image: linuxserver/syncthing
+    container_name: syncthing
+    environment:
+      - UMASK_SET=<022>
+    volumes:
+      - syncthingconfig:/config
+      - pics:/pics
+      - schedule:/schedule
+      - auth:/auth
+    ports:
+      - 8384:8384
+      - 22000:22000
+      - 21027:21027/udp
+    restart: unless-stopped
 volumes:
+  syncthingconfig:
   pictures:
+  authentication:

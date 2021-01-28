@@ -1,25 +1,25 @@
+#!/bin/sh
 while :
 do
     echo Taking still picture
     modprobe v4l2_common && python bird-box.py
 
-    nextBreakHoursPart=$(((6 - ($(date +%H) % 6) - 1) * 3600))
-    nextBreakMinutesPart=$(((60 - ($(date +%M))) * 60 - 120))
-    nextBreakSeconds=$((nextBreakHoursPart + nextBreakMinutesPart))
-    nextBreakMilliseconds=$((nextBreakSeconds * 1000))
+    streamData=$(python getCurrentStream.py)
 
-    echo 'Minutes until next break:' $((nextBreakSeconds / 60))
-
-    if [ $nextBreakSeconds -lt 0 ]
+    if [ -z "$streamData" ]
     then
         echo Sleeping...
         sleep 20s
     else
-        echo Startng YouTube stream
+        streamId=$(echo streamData | jq '.streamId')
+        secondsRemaining=$(echo streamData | jq '.secondsRemaining')
+        millisecondsRemaining=$((secondsRemaining * 1000))
+
+        echo Starting YouTube stream $streamId for $((nextBreakSeconds / 60)) minutes
         echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
         echo Region of interest: $ROI
         echo Starting YouTube stream
-        raspivid -o - -t $nextBreakMilliseconds \
+        raspivid -o - -t $millisecondsRemaining \
             -n \
             -ih \
             -w ${WIDTH:=1280} \
@@ -47,8 +47,8 @@ do
             -ab 128k \
             -g 50 \
             -strict normal \
-            -t $nextBreakSeconds \
-            -f flv rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_KEY
+            -t $secondsRemaining \
+            -f flv rtmp://a.rtmp.youtube.com/live2/$streamId
         echo Streaming finished
     fi
 done
