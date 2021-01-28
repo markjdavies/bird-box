@@ -33,5 +33,6 @@ services:
     restart: unless-stopped
 volumes:
   syncthingconfig:
-  pictures:
-  authentication:
+  pics:
+  schedule:
+  auth:
