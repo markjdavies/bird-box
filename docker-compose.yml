@@ -16,23 +16,23 @@ services:
     ports:
       - 80:80
     restart: unless-stopped
-  syncthing:
-    image: linuxserver/syncthing:arm32v7-latest
-    container_name: syncthing
-    environment:
-      - UMASK_SET=<022>
-    volumes:
-      - syncthingconfig:/config
-      - pics:/pics
-      - schedule:/schedule
-      - auth:/auth
-    ports:
-      - 8384:8384
-      - 22000:22000
-      - 21027:21027/udp
-    restart: unless-stopped
+  # syncthing:
+  #   image: linuxserver/syncthing:arm32v7-latest
+  #   container_name: syncthing
+  #   environment:
+  #     - UMASK_SET=<022>
+  #   volumes:
+  #     - syncthingconfig:/config
+  #     - pics:/pics
+  #     - schedule:/schedule
+  #     - auth:/auth
+  #   ports:
+  #     - 8384:8384
+  #     - 22000:22000
+  #     - 21027:21027/udp
+  #   restart: unless-stopped
 volumes:
-  syncthingconfig:
+  # syncthingconfig:
   pics:
   schedule:
   auth:
