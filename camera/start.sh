@@ -11,7 +11,7 @@ do
         echo Sleeping...
         sleep 20s
         streamData=$( python3 create-broadcast.py -\
-            -broadcast-title "Bird Nesting Box" \
+            --broadcast-title "Bird Nesting Box" \
             --privacy-status "public"  \
             --stream-title "Nesting Box Stream" \
             --description "Oxfordshire, UK")
