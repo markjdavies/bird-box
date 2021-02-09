@@ -10,7 +10,7 @@ do
     then
         echo Sleeping...
         sleep 20s
-        streamData=$( python3 create-broadcast.py -\
+        streamData=$( python3 create-broadcast.py \
             --broadcast-title "Bird Nesting Box" \
             --privacy-status "public"  \
             --stream-title "Nesting Box Stream" \
