@@ -17,7 +17,7 @@ services:
       - 80:80
     restart: unless-stopped
   syncthing:
-    image: linuxserver/syncthing
+    image: linuxserver/syncthing:arm32v7-latest
     container_name: syncthing
     environment:
       - UMASK_SET=<022>
