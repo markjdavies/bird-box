@@ -10,12 +10,17 @@ do
     then
         echo Sleeping...
         sleep 20s
+        streamData=$( python3 create-broadcast.py -\
+            -broadcast-title "Bird Nesting Box" \
+            --privacy-status "public"  \
+            --stream-title "Nesting Box Stream"
+            --description "Oxfordshire, UK")
     else
         streamId=$(echo streamData | jq '.streamId')
         secondsRemaining=$(echo streamData | jq '.secondsRemaining')
         millisecondsRemaining=$((secondsRemaining * 1000))
 
-        echo Starting YouTube stream $streamId for $((nextBreakSeconds / 60)) minutes
+        echo Starting YouTube stream $streamId for $((secondsRemaining / 60)) minutes
         echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
         echo Region of interest: $ROI
         echo Starting YouTube stream
