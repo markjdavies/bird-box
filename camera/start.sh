@@ -13,7 +13,7 @@ do
         streamData=$( python3 create-broadcast.py -\
             -broadcast-title "Bird Nesting Box" \
             --privacy-status "public"  \
-            --stream-title "Nesting Box Stream"
+            --stream-title "Nesting Box Stream" \
             --description "Oxfordshire, UK")
     else
         streamId=$(echo streamData | jq '.streamId')
