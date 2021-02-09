@@ -17,6 +17,7 @@ do
             --description "Oxfordshire, UK")
         errorMessage=$(echo streamData | jq '.error.message')
         if [ -z "$errorMessage" ]
+        then
             echo Success
         else
             echo $errorMessage
