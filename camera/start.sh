@@ -16,12 +16,12 @@ do
             --stream-title "Nesting Box Stream" \
             --description "Oxfordshire, UK")
         echo $streamData
-        errorMessage=$(echo streamData | jq '.error.message')
+        errorMessage=$(echo $streamData | jq '.error.message')
         if [ -z "$errorMessage" ]
         then
             echo Success
-            streamId=$(echo streamData | jq '.stream')
-            secondsRemaining=$(echo streamData | jq '.timeRemaining')
+            streamId=$(echo $streamData | jq '.stream')
+            secondsRemaining=$(echo $streamData | jq '.timeRemaining')
         else
             echo $errorMessage
             echo Trying default stream
@@ -29,10 +29,10 @@ do
             secondsRemaining=21540
         fi
     else
-        streamId=$(echo streamData | jq '.stream')
-        secondsRemaining=$(echo streamData | jq '.timeRemaining')
+        streamId=$(echo $streamData | jq '.stream')
+        secondsRemaining=$(echo $streamData | jq '.timeRemaining')
     fi
-    millisecondsRemaining=$((secondsRemaining * 1000))
+    millisecondsRemaining=$(($secondsRemaining * 1000))
 
     echo Starting YouTube stream $streamId for $((secondsRemaining / 60)) minutes
     echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
