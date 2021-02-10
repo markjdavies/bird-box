@@ -15,19 +15,23 @@ do
             --privacy-status "public"  \
             --stream-title "Nesting Box Stream" \
             --description "Oxfordshire, UK")
+        echo $streamData
         errorMessage=$(echo streamData | jq '.error.message')
         if [ -z "$errorMessage" ]
         then
             echo Success
+            streamId=$(echo streamData | jq '.streamId')
+            secondsRemaining=$(echo streamData | jq '.secondsRemaining')
         else
             echo $errorMessage
             echo Trying default stream
             streamId=${YOU_TUBE_API_KEY}
+            secondsRemaining=21540
         fi
     else
         streamId=$(echo streamData | jq '.streamId')
+        secondsRemaining=$(echo streamData | jq '.secondsRemaining')
     fi
-    secondsRemaining=$(echo streamData | jq '.secondsRemaining')
     millisecondsRemaining=$((secondsRemaining * 1000))
 
     echo Starting YouTube stream $streamId for $((secondsRemaining / 60)) minutes
