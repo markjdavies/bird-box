@@ -21,7 +21,7 @@ do
         then
             echo Success
             streamId=$(echo streamData | jq '.stream')
-            secondsRemaining=$(echo streamData | jq '.secondsRemaining')
+            secondsRemaining=$(echo streamData | jq '.timeRemaining')
         else
             echo $errorMessage
             echo Trying default stream
