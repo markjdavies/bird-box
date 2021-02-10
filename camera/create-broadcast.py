@@ -128,7 +128,7 @@ def bind_broadcast(youtube, broadcast_id, stream_id, options):
     bind_broadcast_response["contentDetails"]["boundStreamId"],
     options.start_time,
     options.end_time,
-    timeRemaining))
+    timeRemaining.total_seconds()))
 
 if __name__ == "__main__":
   argparser.add_argument("--broadcast-title", help="Broadcast title",
