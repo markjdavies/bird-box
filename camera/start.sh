@@ -1,6 +1,6 @@
 #!/bin/sh
-while :
-do
+# while :
+# do
     echo Taking still picture
     modprobe v4l2_common && python bird-box.py
 
@@ -69,10 +69,4 @@ do
         -t $secondsRemaining \
         -f flv rtmp://a.rtmp.youtube.com/live2/$streamId
     echo Streaming finished
-done
-
-#  \
-#         -vf " \
-#                 drawtext=fontfile=/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf: \
-#                 text='\%T': fontcolor=black@0.8: x=7: y=700 \
-#             "
+# done
