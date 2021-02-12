@@ -68,7 +68,7 @@ def insert_broadcast(youtube, options):
   startTime = datetime.strptime(options.start_time, "%Y-%m-%d %H:%M")
   endTime = startTime + timedelta(minutes = 359)
   insert_broadcast_response = youtube.liveBroadcasts().insert(
-    part="snippet,status",
+    part="snippet,status,contentDetails",
     body=dict(
       snippet=dict(
         title=options.broadcast_title,
@@ -77,12 +77,18 @@ def insert_broadcast(youtube, options):
         scheduledEndTime=endTime.strftime('%Y-%m-%d %H:%M')
       ),
       status=dict(
-        privacyStatus=options.privacy_status
+        privacyStatus=options.privacy_status,
+        selfDeclaredMadeForKids=False
+      ),
+      contentDetails=dict(
+        enableAutoStart=True,
+        enableAutoStop=True,
+        latencyPreference="ultraLow"
       )
     )
   ).execute()
 
-  snippet = insert_broadcast_response["snippet"]
+  # snippet = insert_broadcast_response["snippet"]
 
   return insert_broadcast_response["id"]
 
@@ -104,10 +110,23 @@ def insert_stream(youtube, options):
     )
   ).execute()
 
-  snippet = insert_stream_response["snippet"]
+  # snippet = insert_stream_response["snippet"]
 
   return insert_stream_response["id"]
 
+# Update the video metadata
+def update_video_metadata(youtube, video_id, options):
+  # Update the video resource by calling the videos.update() method.
+  youtube.videos().update(
+    part='snippet',
+    body=dict(
+      snippet=dict(
+        title=options.broadcast_title,
+        description=options.description,
+        categoryId=options.categoryId
+      ),
+      id=video_id
+    )).execute()
 
 # Bind the broadcast to the video stream. By doing so, you link the video that
 # you will transmit to YouTube to the broadcast that the video is for.
@@ -127,7 +146,7 @@ def bind_broadcast(youtube, broadcast_id, stream_id, options):
     bind_broadcast_response["id"],
     bind_broadcast_response["contentDetails"]["boundStreamId"],
     options.start_time,
-    options.end_time,
+    endTime,
     int(round(timeRemaining.total_seconds()))))
 
 if __name__ == "__main__":
@@ -142,12 +161,14 @@ if __name__ == "__main__":
   argparser.add_argument("--stream-title", help="Stream title",
     default="New Stream")
   argparser.add_argument("--description", help="Stream description", default="")
+  argparser.add_argument("--categoryId", help="Category ID", default="15")
   args = argparser.parse_args()
 
   youtube = get_authenticated_service(args)
   try:
     broadcast_id = insert_broadcast(youtube, args)
     stream_id = insert_stream(youtube, args)
+    update_video_metadata(youtube, broadcast_id, args)
     bind_broadcast(youtube, broadcast_id, stream_id, args)
   except HttpError as e:
     print(json.dumps(json.loads(e.content)))
