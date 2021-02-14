@@ -20,7 +20,7 @@
         if [ -n "$errorMessage" ]
         then
             echo Success
-            streamId=$(echo $streamData | jq '.stream')
+            streamId=$(echo $streamData | jq -r '.stream')
             secondsRemainingString=$(echo $streamData | jq '.timeRemaining')
             secondsRemaining=$(echo $secondsRemainingString | tr -dc '0-9')
         else
@@ -30,7 +30,7 @@
             secondsRemaining=21540
         fi
     else
-        streamId=$(echo $streamData | jq '.stream')
+        streamId=$(echo $streamData | jq -r '.stream')
         secondsRemainingString=$(echo $streamData | jq '.timeRemaining')
         secondsRemaining=$(echo $secondsRemainingString | tr -dc '0-9')
     fi
