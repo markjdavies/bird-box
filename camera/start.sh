@@ -21,7 +21,8 @@
         then
             echo Success
             streamId=$(echo $streamData | jq '.stream')
-            secondsRemaining=$(echo $streamData | jq '.timeRemaining')
+            secondsRemainingString=$(echo $streamData | jq '.timeRemaining')
+            secondsRemaining=$(echo $secondsRemainingString | tr -dc '0-9')
         else
             echo $errorMessage
             echo Trying default stream
@@ -30,7 +31,8 @@
         fi
     else
         streamId=$(echo $streamData | jq '.stream')
-        secondsRemaining=$(echo $streamData | jq '.timeRemaining')
+        secondsRemainingString=$(echo $streamData | jq '.timeRemaining')
+        secondsRemaining=$(echo $secondsRemainingString | tr -dc '0-9')
     fi
     millisecondsRemaining=$(($secondsRemaining * 1000))
 
