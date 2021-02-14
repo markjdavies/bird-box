@@ -17,7 +17,7 @@
             --description "Oxfordshire, UK")
         echo $streamData
         errorMessage=$(echo $streamData | jq '.error.message')
-        if [ -z "$errorMessage" ]
+        if [ -n "$errorMessage" ]
         then
             echo Success
             streamId=$(echo $streamData | jq '.stream')
