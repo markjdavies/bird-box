@@ -1,6 +1,6 @@
 #!/bin/sh
-# while :
-# do
+while :
+do
     echo Taking still picture
     modprobe v4l2_common && python bird-box.py
 
@@ -8,7 +8,6 @@
 
     if [ -z "$streamData" ]
     then
-        echo Sleeping...
         streamData=$( python3 create-broadcast.py \
             --broadcast-title "Bird Nesting Box" \
             --privacy-status "public"  \
@@ -36,6 +35,7 @@
     echo Starting YouTube stream $streamId for $((secondsRemaining / 60)) minutes
     echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
     echo Region of interest: $ROI
+    echo Sleeping...
     sleep 20s
     echo Starting YouTube stream
     raspivid -o - -t $millisecondsRemaining \
@@ -70,4 +70,12 @@
         -t $secondsRemaining \
         -f flv rtmp://a.rtmp.youtube.com/live2/$streamId
     echo Streaming finished
-# done
+
+    while [ $(($(date +%H) % 6)) != 5 ]:
+    do
+        echo Taking still picture
+        modprobe v4l2_common && python bird-box.py
+        echo Sleeping...
+        sleep 20s
+    done
+done
