@@ -1,8 +1,8 @@
-#!/bin/sh
-while :
-do
-    echo Taking still picture
-    modprobe v4l2_common && python bird-box.py
+# #!/bin/sh
+# while :
+# do
+    # echo Taking still picture
+    # modprobe v4l2_common && python bird-box.py
 
     streamData=$(python getCurrentStream.py)
 
@@ -15,7 +15,7 @@ do
             --description "Oxfordshire, UK")
         echo $streamData
         errorMessage=$(echo $streamData | jq '.error.message')
-        if [ -n "$errorMessage" ]
+        if [ $errorMessage = null ]
         then
             echo Success
             streamId=$(echo $streamData | jq -r '.stream')
@@ -56,18 +56,16 @@ do
         --roi ${ROI:=0,0,1,1} \
     | \
     ffmpeg -re \
-        -ar 44100 -ac 2 -acodec pcm_s16le -f s16le -ac 2 -t $secondsRemaining -i /dev/zero \
+        -ar 44100 -ac 2 -acodec pcm_s16le -f s16le -ac 2 -i /dev/zero \
         -re \
         -f h264 \
-        -t $secondsRemaining \
         -thread_queue_size ${THREAD_QUEUE_SIZE:=1024} \
         -i - \
         -vcodec copy \
         -acodec aac \
         -ab 128k \
         -g 50 \
-        -strict normal \
-        -t $secondsRemaining \
+        -strict experimental \
         -f flv rtmp://a.rtmp.youtube.com/live2/$streamId
     echo Streaming finished
 
@@ -78,4 +76,4 @@ do
         echo Sleeping...
         sleep 20s
     done
-done
+# done
