@@ -31,13 +31,13 @@ else
 fi
 millisecondsRemaining=$(($secondsRemaining * 1000))
 
-echo Starting YouTube stream $streamId for $((secondsRemaining / 60)) minutes
+echo Starting YouTube stream $streamId for $((secondsRemaining / 60)) minutes, ie $millisecondsRemaining milliseconds
 echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
 echo Region of interest: $ROI
 echo Sleeping...
 sleep 20s
 echo Starting YouTube stream
-raspivid -o - -t $millisecondsRemaining \
+raspivid -o - -t 0 \
     -n \
     -ih \
     -w ${WIDTH:=1280} \
@@ -59,12 +59,14 @@ ffmpeg -re \
     -re \
     -f h264 \
     -thread_queue_size ${THREAD_QUEUE_SIZE:=1024} \
+    -loglevel debug \
     -i - \
     -vcodec copy \
     -acodec aac \
     -ab 128k \
     -g 50 \
-    -strict experimental \
+    -strict normal \
+    -t ${STREAM_LENGTH:=05:59:00} \
     -f flv rtmp://a.rtmp.youtube.com/live2/$streamId
 echo Streaming finished
 
