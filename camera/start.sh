@@ -11,8 +11,8 @@ then
         --broadcast-title "Bird Nesting Box" \
         --privacy-status "public"  \
         --stream-title "Nesting Box Stream" \
-        --description "Oxfordshire, UK") \
-        --streamId ${FIXED_STREAM_ID:=""}
+        --description "Oxfordshire, UK" \
+        --streamId ${FIXED_STREAM_ID})
     echo $streamData
     errorMessage=$(echo $streamData | jq '.error.message')
     if [ $errorMessage = null ]
