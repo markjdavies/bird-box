@@ -11,7 +11,8 @@ then
         --broadcast-title "Bird Nesting Box" \
         --privacy-status "public"  \
         --stream-title "Nesting Box Stream" \
-        --description "Oxfordshire, UK")
+        --description "Oxfordshire, UK") \
+        --streamId ${FIXED_STREAM_ID:=""}
     echo $streamData
     errorMessage=$(echo $streamData | jq '.error.message')
     if [ $errorMessage = null ]
@@ -30,8 +31,9 @@ else
     secondsRemaining=$(echo $streamData | jq -r '.timeRemaining')
 fi
 millisecondsRemaining=$(($secondsRemaining * 1000))
+streamLength=$(date -d@$secondsRemaining -u +%H:%M:%S)
 
-echo Starting YouTube stream $streamId for $((secondsRemaining / 60)) minutes, ie $millisecondsRemaining milliseconds
+echo Starting YouTube stream $streamId for $streamLength
 echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
 echo Region of interest: $ROI
 echo Sleeping...
@@ -66,7 +68,7 @@ ffmpeg -re \
     -ab 128k \
     -g 50 \
     -strict normal \
-    -t ${STREAM_LENGTH:=05:59:00} \
+    -t $streamLength \
     -f flv rtmp://a.rtmp.youtube.com/live2/$streamId
 echo Streaming finished
 

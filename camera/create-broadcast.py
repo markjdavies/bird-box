@@ -161,14 +161,19 @@ if __name__ == "__main__":
   argparser.add_argument("--stream-title", help="Stream title",
     default="New Stream")
   argparser.add_argument("--description", help="Stream description", default="")
+  argparser.add_argument("--streamId", help="ID of existing stream to re-use", default="")
   argparser.add_argument("--categoryId", help="Category ID", default="15")
   args = argparser.parse_args()
 
   youtube = get_authenticated_service(args)
   try:
     broadcast_id = insert_broadcast(youtube, args)
-    stream_id = insert_stream(youtube, args)
     update_video_metadata(youtube, broadcast_id, args)
+    if args.streamId == "":
+      stream_id = insert_stream(youtube, args)
+    else:
+      stream_id = args.streamId
+
     bind_broadcast(youtube, broadcast_id, stream_id, args)
   except HttpError as e:
     print(json.dumps(json.loads(e.content)))
