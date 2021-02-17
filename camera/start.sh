@@ -15,7 +15,7 @@ then
         --streamId ${FIXED_STREAM_ID})
     echo $streamData
     errorMessage=$(echo $streamData | jq '.error.message')
-    if [ -z $errorMessage ]
+    if [ "$errorMessage" = "null" ]
     then
         echo Success
         streamId=$(echo $streamData | jq -r '.stream')
