@@ -1,7 +1,7 @@
 # #!/bin/sh
 
-# echo Taking still picture
-# modprobe v4l2_common && python bird-box.py
+echo Taking still picture
+modprobe v4l2_common && python bird-box.py
 
 streamData=$(python getCurrentStream.py)
 
@@ -39,8 +39,7 @@ streamLength=$(date -d@$secondsRemaining -u +%H:%M:%S)
 echo Starting YouTube stream $streamName for $streamLength
 echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
 echo Region of interest: $ROI
-echo Sleeping...
-sleep 20s
+
 echo Starting YouTube stream
 raspivid -o - -t 0 \
     -n \
