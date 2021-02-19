@@ -3,8 +3,7 @@ from datetime import datetime
 
 with open('/schedule/streams.json', 'r') as streamsFile:
     streamsData=streamsFile.read()
-streamsJson = json.loads(streamsData)
-streams = streamsJson['streams']
+streams = json.loads(streamsData)
 
 for stream in streams:
     startTime = datetime.strptime(stream['startTime'], "%Y-%m-%d %H:%M")
