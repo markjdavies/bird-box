@@ -156,7 +156,7 @@ if __name__ == "__main__":
   argparser.add_argument("--privacy-status", help="Broadcast privacy status",
     default="private")
   argparser.add_argument("--start-time", help="Scheduled start time",
-    default=datetime.now().strftime('%Y-%m-%d %H:%M'))
+    default=(datetime.now() + timedelta(seconds = 2)).strftime('%Y-%m-%d %H:%M:%S'))
   argparser.add_argument("--end-time", help="Scheduled end time",
     default='2014-01-31T00:00:00.000Z')
   argparser.add_argument("--stream-title", help="Stream title",
