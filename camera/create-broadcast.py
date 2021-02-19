@@ -112,7 +112,7 @@ def insert_stream(youtube, options):
 
   # snippet = insert_stream_response["snippet"]
 
-  return insert_stream_response["id"]
+  return insert_stream_response
 
 # Update the video metadata
 def update_video_metadata(youtube, video_id, options):
@@ -130,7 +130,7 @@ def update_video_metadata(youtube, video_id, options):
 
 # Bind the broadcast to the video stream. By doing so, you link the video that
 # you will transmit to YouTube to the broadcast that the video is for.
-def bind_broadcast(youtube, broadcast_id, stream_id, options):
+def bind_broadcast(youtube, broadcast_id, stream_id, stream_name, options):
   bind_broadcast_response = youtube.liveBroadcasts().bind(
     part="id,contentDetails",
     id=broadcast_id,
@@ -142,9 +142,10 @@ def bind_broadcast(youtube, broadcast_id, stream_id, options):
   timeNow = datetime.now()
   timeRemaining = endTime - timeNow
 
-  print ('{"broadcast":"%s","stream":"%s","startTime":"%s","endTime":"%s","timeRemaining":"%s"}' % (
+  print ('{"broadcast":"%s","streamId":"%s","streamName":"%s","startTime":"%s","endTime":"%s","timeRemaining":"%s"}' % (
     bind_broadcast_response["id"],
     bind_broadcast_response["contentDetails"]["boundStreamId"],
+    stream_name,
     options.start_time,
     endTime,
     int(round(timeRemaining.total_seconds()))))
@@ -162,6 +163,7 @@ if __name__ == "__main__":
     default="New Stream")
   argparser.add_argument("--description", help="Stream description", default="")
   argparser.add_argument("--streamId", help="ID of existing stream to re-use", default="")
+  argparser.add_argument("--streamName", help="Name (key) of existing stream to re-use", default="")
   argparser.add_argument("--categoryId", help="Category ID", default="15")
   args = argparser.parse_args()
 
@@ -170,10 +172,13 @@ if __name__ == "__main__":
     broadcast_id = insert_broadcast(youtube, args)
     update_video_metadata(youtube, broadcast_id, args)
     if args.streamId == "":
-      stream_id = insert_stream(youtube, args)
+      stream = insert_stream(youtube, args)
+      stream_id = stream["id"]
+      stream_name = stream["cdn"]["name"]
     else:
       stream_id = args.streamId
+      stream_name = args.streamName
 
-    bind_broadcast(youtube, broadcast_id, stream_id, args)
+    bind_broadcast(youtube, broadcast_id, stream_id, stream_name, args)
   except HttpError as e:
     print(json.dumps(json.loads(e.content)))

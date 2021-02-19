@@ -12,28 +12,31 @@ then
         --privacy-status "public"  \
         --stream-title "Nesting Box Stream" \
         --description "Oxfordshire, UK" \
-        --streamId ${FIXED_STREAM_ID})
+        --streamId ${FIXED_STREAM_ID} \
+        --streamName ${FIXED_STREAM_NAME} \
+    )
     echo $streamData
     errorMessage=$(echo $streamData | jq '.error.message')
     if [ "$errorMessage" = "null" ]
     then
         echo Success
-        streamId=$(echo $streamData | jq -r '.stream')
+        echo "[$streamData]" > /schedule/streams.json
+        streamName=$(echo $streamData | jq -r '.streamName')
         secondsRemaining=$(echo $streamData | jq -r '.timeRemaining')
     else
         echo $errorMessage
         echo Trying default stream
-        streamId=${YOU_TUBE_API_KEY}
+        streamName=${YOU_TUBE_API_KEY}
         secondsRemaining=21540
     fi
 else
-    streamId=$(echo $streamData | jq -r '.stream')
+    streamName=$(echo $streamData | jq -r '.streamName')
     secondsRemaining=$(echo $streamData | jq -r '.timeRemaining')
 fi
 millisecondsRemaining=$(($secondsRemaining * 1000))
 streamLength=$(date -d@$secondsRemaining -u +%H:%M:%S)
 
-echo Starting YouTube stream $streamId for $streamLength
+echo Starting YouTube stream $streamName for $streamLength
 echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
 echo Region of interest: $ROI
 echo Sleeping...
@@ -69,7 +72,7 @@ ffmpeg -re \
     -g 50 \
     -strict normal \
     -t $streamLength \
-    -f flv rtmp://a.rtmp.youtube.com/live2/$streamId
+    -f flv rtmp://a.rtmp.youtube.com/live2/$streamName
 echo Streaming finished
 
 while [ $(($(date +%H) % 6)) != 5 ]
