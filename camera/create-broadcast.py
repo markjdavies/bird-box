@@ -74,7 +74,7 @@ def insert_broadcast(youtube, options):
         title=options.broadcast_title,
         description=options.description,
         scheduledStartTime=options.start_time,
-        scheduledEndTime=endTime.strftime('%Y-%m-%d %H:%M')
+        scheduledEndTime=endTime.strftime('%Y-%m-%d %H:%M:%S')
       ),
       status=dict(
         privacyStatus=options.privacy_status,
@@ -158,7 +158,7 @@ if __name__ == "__main__":
   argparser.add_argument("--start-time", help="Scheduled start time",
     default=(datetime.now() + timedelta(seconds = 2)).strftime('%Y-%m-%d %H:%M:%S'))
   argparser.add_argument("--end-time", help="Scheduled end time",
-    default='2014-01-31T00:00:00.000Z')
+    default=(datetime.now() + timedelta(minutes = 359)).strftime('%Y-%m-%d %H:%M:%S'))
   argparser.add_argument("--stream-title", help="Stream title",
     default="New Stream")
   argparser.add_argument("--description", help="Stream description", default="")
