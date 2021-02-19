@@ -65,7 +65,7 @@ def get_authenticated_service(args):
 # Create a liveBroadcast resource and set its title, scheduled start time,
 # scheduled end time, and privacy status.
 def insert_broadcast(youtube, options):
-  startTime = datetime.strptime(options.start_time, "%Y-%m-%d %H:%M")
+  startTime = datetime.strptime(options.start_time, "%Y-%m-%d %H:%M:%S")
   endTime = startTime + timedelta(minutes = 359)
   insert_broadcast_response = youtube.liveBroadcasts().insert(
     part="snippet,status,contentDetails",
@@ -137,7 +137,7 @@ def bind_broadcast(youtube, broadcast_id, stream_id, stream_name, options):
     streamId=stream_id
   ).execute()
 
-  startTime = datetime.strptime(options.start_time, "%Y-%m-%d %H:%M")
+  startTime = datetime.strptime(options.start_time, "%Y-%m-%d %H:%M:%S")
   endTime = startTime + timedelta(minutes = 359)
   timeNow = datetime.now()
   timeRemaining = endTime - timeNow
