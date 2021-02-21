@@ -7,6 +7,11 @@ streamData=$(python getCurrentStream.py)
 
 if [ -z "$streamData" ]
 then
+    echo "No current broadcast found"
+    streamStartHoursOffset=${STREAM_START_HOURS_OFFSET: 0} % 6
+    currentHour=$(date +%H)
+    streamEnd=$((((23 - ${streamStartHoursOffset} - $currentHour) % 6 ) + $currentHour)):59:00
+    echo "Creating broadcast from now until $streamEnd"
     streamData=$( python3 create-broadcast.py \
         --broadcast-title "Bird Nesting Box" \
         --privacy-status "${PRIVACY_STATUS:=public}"  \
@@ -14,6 +19,7 @@ then
         --description "Oxfordshire, UK" \
         --streamId ${FIXED_STREAM_ID} \
         --streamName ${FIXED_STREAM_NAME} \
+        --end-time $streamEnd \
     )
     echo $streamData
     errorMessage=$(echo $streamData | jq '.error.message')
