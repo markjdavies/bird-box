@@ -9,7 +9,7 @@ if [ -z "$streamData" ]
 then
     streamData=$( python3 create-broadcast.py \
         --broadcast-title "Bird Nesting Box" \
-        --privacy-status "public"  \
+        --privacy-status "${PRIVACY_STATUS:=public}"  \
         --stream-title "Nesting Box Stream" \
         --description "Oxfordshire, UK" \
         --streamId ${FIXED_STREAM_ID} \
