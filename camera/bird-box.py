@@ -15,6 +15,7 @@ for i in range(100):
         time.sleep(2)
         filename = datetime.now().strftime('/pics/birdbox_%Y%m%d%H%M%S.jpg')
         camera.capture(filename)
+        camera.close()
     except Exception as e:
       print('Could not take still picture')
       print(e)
@@ -25,7 +26,3 @@ for i in range(100):
       break
   else:
       print('Giving up on still picture')
-    # we failed all the attempts - deal with the consequences.
-
-
-
