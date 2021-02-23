@@ -79,11 +79,3 @@ ffmpeg -re \
     -t $streamLength \
     -f flv rtmp://a.rtmp.youtube.com/live2/$streamName
 echo Streaming finished
-
-while [ $(($(date +%H) % 6)) != 5 ]
-do
-    echo Taking still picture
-    modprobe v4l2_common && python bird-box.py
-    echo Sleeping...
-    sleep 20s
-done
