@@ -1,9 +1,9 @@
 # #!/bin/sh
 
 echo Taking still picture
-modprobe v4l2_common && python bird-box.py
+modprobe v4l2_common && python3 bird-box.py
 
-streamData=$(python getCurrentStream.py)
+streamData=$(python3 getCurrentStream.py)
 
 if [ -z "$streamData" ]
 then
