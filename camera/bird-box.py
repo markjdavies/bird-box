@@ -9,7 +9,7 @@ for i in range(100):
   for attempt in range(10):
     try:
       with picamera.PiCamera() as camera:
-        camera.CAPTURE_TIMEOUT = 60 # seconds
+        picamera.PiCamera.CAPTURE_TIMEOUT = 60 # seconds
         camera.resolution = (1280, 720)
         # Camera warm-up time
         time.sleep(2)
