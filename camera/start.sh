@@ -69,7 +69,7 @@ ffmpeg -re \
     -re \
     -f h264 \
     -thread_queue_size ${THREAD_QUEUE_SIZE:=1024} \
-    -loglevel debug \
+    -loglevel ${LOG_LEVEL:=info} \
     -i - \
     -vcodec copy \
     -acodec aac \
