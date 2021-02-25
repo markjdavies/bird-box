@@ -36,6 +36,8 @@ then
         secondsRemaining=21540
     fi
 else
+    echo 'Found scheduled broadcast'
+    echo $streamData
     streamName=$(echo $streamData | jq -r '.streamName')
     secondsRemaining=$(echo $streamData | jq -r '.timeRemaining')
 fi
