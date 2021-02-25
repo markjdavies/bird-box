@@ -11,6 +11,6 @@ for stream in streams:
     timeNow = datetime.now()
     if startTime < timeNow and endTime > timeNow:
         timeRemaining = endTime - timeNow
-        stream['secondsRemaining'] = str(int(round(timeRemaining.total_seconds())))
+        stream['timeRemaining'] = str(int(round(timeRemaining.total_seconds())))
         streamJson = json.dumps(stream)
         print(streamJson)
