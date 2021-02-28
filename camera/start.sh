@@ -1,4 +1,4 @@
-if [{$MODE:=STREAM} = 'STILL']
+if [${MODE:=STREAM} = 'STILL']
 then
     modprobe v4l2_common && python bird-box.py &
     cd /data
