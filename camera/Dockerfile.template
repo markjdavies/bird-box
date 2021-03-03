@@ -10,6 +10,8 @@ RUN apt-get update && \
 COPY ./requirements.txt /requirements.txt
 RUN READTHEDOCS=True pip install -r /requirements.txt
 
+ENV BALENA_RELEASE_HASH=%%BALENA_RELEASE_HASH%%
+
 EXPOSE 80
 
 COPY . /usr/src/app
