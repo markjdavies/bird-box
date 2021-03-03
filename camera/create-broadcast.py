@@ -65,8 +65,6 @@ def get_authenticated_service(args):
 # Create a liveBroadcast resource and set its title, scheduled start time,
 # scheduled end time, and privacy status.
 def insert_broadcast(youtube, options):
-  startTime = datetime.strptime(options.start_time, "%Y-%m-%d %H:%M:%S")
-  endTime = startTime + timedelta(minutes = 359)
   insert_broadcast_response = youtube.liveBroadcasts().insert(
     part="snippet,status,contentDetails",
     body=dict(
@@ -74,7 +72,7 @@ def insert_broadcast(youtube, options):
         title=options.broadcast_title,
         description=options.description,
         scheduledStartTime=options.start_time,
-        scheduledEndTime=endTime.strftime('%Y-%m-%d %H:%M:%S')
+        scheduledEndTime=options.end_time
       ),
       status=dict(
         privacyStatus=options.privacy_status,
@@ -137,8 +135,7 @@ def bind_broadcast(youtube, broadcast_id, stream_id, stream_name, options):
     streamId=stream_id
   ).execute()
 
-  startTime = datetime.strptime(options.start_time, "%Y-%m-%d %H:%M:%S")
-  endTime = startTime + timedelta(minutes = 359)
+  endTime = datetime.strptime(options.end_time, "%Y-%m-%d %H:%M:%S")
   timeNow = datetime.now()
   timeRemaining = endTime - timeNow
 
@@ -147,7 +144,7 @@ def bind_broadcast(youtube, broadcast_id, stream_id, stream_name, options):
     bind_broadcast_response["contentDetails"]["boundStreamId"],
     stream_name,
     options.start_time,
-    endTime,
+    options.end_time,
     int(round(timeRemaining.total_seconds()))))
 
 if __name__ == "__main__":
