@@ -22,7 +22,7 @@ from oauth2client.tools import argparser, run_flow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = "/auth/client_secrets.json"
+CLIENT_SECRETS_FILE = "client_secrets.json"
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
@@ -49,11 +49,11 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
                                    CLIENT_SECRETS_FILE))
 
 def get_authenticated_service(args):
-  flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
+  flow = flow_from_clientsecrets("%s%s" %(args.auth_path, CLIENT_SECRETS_FILE),
     scope=YOUTUBE_READ_WRITE_SCOPE,
     message=MISSING_CLIENT_SECRETS_MESSAGE)
 
-  storage = Storage("/auth/%s-oauth2.json" % sys.argv[0])
+  storage = Storage("%s%s-oauth2.json" %(args.auth_path, sys.argv[0]))
   credentials = storage.get()
 
   if credentials is None or credentials.invalid:
@@ -129,19 +129,22 @@ def update_video_metadata(youtube, video_id, options):
 # Bind the broadcast to the video stream. By doing so, you link the video that
 # you will transmit to YouTube to the broadcast that the video is for.
 def bind_broadcast(youtube, broadcast_id, stream_id, stream_name, options):
-  bind_broadcast_response = youtube.liveBroadcasts().bind(
-    part="id,contentDetails",
-    id=broadcast_id,
-    streamId=stream_id
-  ).execute()
+  if not options.dry_run:
+    bind_broadcast_response = youtube.liveBroadcasts().bind(
+      part="id,contentDetails",
+      id=broadcast_id,
+      streamId=stream_id
+    ).execute()
+    broadcast_id = bind_broadcast_response["id"]
+    stream_id = bind_broadcast_response["contentDetails"]["boundStreamId"]
 
   endTime = datetime.strptime(options.end_time, "%Y-%m-%d %H:%M:%S")
   timeNow = datetime.now()
   timeRemaining = endTime - timeNow
 
   print ('{"broadcast":"%s","streamId":"%s","streamName":"%s","startTime":"%s","endTime":"%s","timeRemaining":"%s"}' % (
-    bind_broadcast_response["id"],
-    bind_broadcast_response["contentDetails"]["boundStreamId"],
+    broadcast_id,
+    stream_id,
     stream_name,
     options.start_time,
     options.end_time,
@@ -162,16 +165,26 @@ if __name__ == "__main__":
   argparser.add_argument("--streamId", help="ID of existing stream to re-use", default="")
   argparser.add_argument("--streamName", help="Name (key) of existing stream to re-use", default="")
   argparser.add_argument("--categoryId", help="Category ID", default="15")
+  argparser.add_argument("--auth-path", help="Auth folder path", default="/auth/")
+  argparser.add_argument("--dry-run", help="Skip creation and binding of stream and broadcast", default=False)
   args = argparser.parse_args()
 
   youtube = get_authenticated_service(args)
   try:
-    broadcast_id = insert_broadcast(youtube, args)
-    update_video_metadata(youtube, broadcast_id, args)
+    if args.dry_run:
+      broadcast_id = "dry"
+    else:
+      broadcast_id = insert_broadcast(youtube, args)
+      update_video_metadata(youtube, broadcast_id, args)
+
     if args.streamId == "":
-      stream = insert_stream(youtube, args)
-      stream_id = stream["id"]
-      stream_name = stream["cdn"]["name"]
+      if args.dry_run:
+        stream_id = "dry"
+        stream_name = "dry run stream"
+      else:
+        stream = insert_stream(youtube, args)
+        stream_id = stream["id"]
+        stream_name = stream["cdn"]["name"]
     else:
       stream_id = args.streamId
       stream_name = args.streamName
