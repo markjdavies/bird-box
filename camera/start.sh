@@ -23,7 +23,7 @@ then
         --broadcast-title "Bird Nesting Box" \
         --privacy-status "${PRIVACY_STATUS:=public}"  \
         --stream-title "Nesting Box Stream" \
-        --description "Oxfordshire, UK" \
+        --description "Oxfordshire, UK - ${BALENA_RELEASE_HASH}" \
         --streamId ${FIXED_STREAM_ID} \
         --streamName ${FIXED_STREAM_NAME} \
         --end-time $finishDate $streamEnd \
