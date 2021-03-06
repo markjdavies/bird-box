@@ -26,7 +26,7 @@ then
         --description "Oxfordshire, UK - ${BALENA_RELEASE_HASH}" \
         --streamId ${FIXED_STREAM_ID} \
         --streamName ${FIXED_STREAM_NAME} \
-        --end-time $finishDate $streamEnd \
+        --end-time "$finishDate $streamEnd" \
     )
     echo $streamData
     errorMessage=$(echo $streamData | jq '.error.message')
