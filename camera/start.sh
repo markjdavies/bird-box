@@ -14,9 +14,9 @@ then
     streamEnd=$(($finishHour)):59:00
     if [ $finishHour -lt $currentHour ]
     then
-        finishDate=$(date -d "1 day" +%d-%m-%Y)
+        finishDate=$(date -d "1 day" +%Y-%m-%d)
     else
-        finishDate=$(date +%d-%m-%Y)
+        finishDate=$(date +%Y-%m-%d)
     fi
     echo "Creating broadcast from now until $finishDate $streamEnd"
     streamData=$( python3 create-broadcast.py \
