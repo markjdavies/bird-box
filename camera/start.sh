@@ -3,7 +3,7 @@
 echo Taking still picture
 modprobe v4l2_common && python3 bird-box.py
 
-streamData=$(python3 getCurrentStream.py)
+# streamData=$(python3 getCurrentStream.py)
 
 if [ -z "$streamData" ]
 then
