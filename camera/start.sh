@@ -56,7 +56,7 @@ echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${I
 echo Region of interest: $ROI
 
 echo Starting YouTube stream
-raspivid -o - -t 0 \
+raspivid -o - -t $millisecondsRemaining \
     -n \
     -ih \
     -w ${WIDTH:=1280} \
