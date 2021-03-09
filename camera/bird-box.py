@@ -5,12 +5,11 @@ import time
 import picamera
 from datetime import datetime
 
-
-for attempt in range(300):
+while True:
   filename = datetime.now().strftime('/pics/birdbox_%Y%m%d%H%M%S.jpg')
   try:
     with picamera.PiCamera() as camera:
-      picamera.PiCamera.CAPTURE_TIMEOUT = 53 # seconds
+      picamera.PiCamera.CAPTURE_TIMEOUT = 20 # seconds
       camera.resolution = (1280, 720)
       camera.awb_mode = 'off'
       camera.start_preview()
@@ -26,5 +25,3 @@ for attempt in range(300):
   else:
     print('Picture taken')
     break
-else:
-    print('Giving up on still picture')
