@@ -11,7 +11,9 @@ while True:
     with picamera.PiCamera() as camera:
       picamera.PiCamera.CAPTURE_TIMEOUT = 20 # seconds
       camera.resolution = (1280, 720)
-      camera.awb_mode = 'off'
+      camera.iso = 800
+      # camera.sensor_mode = 7
+      # camera.awb_mode = 'off'
       camera.start_preview()
       # Camera warm-up time
       time.sleep(2)
