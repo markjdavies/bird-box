@@ -9,14 +9,14 @@ if [ -z "$streamData" ]
 then
     echo "No current broadcast found"
     streamStartHoursOffset=$((${STREAM_START_HOURS_OFFSET:=0} % 6))
-    currentHour=$(date +%H)
+    currentHour=$(date -u +%H)
     finishHour=$(((23 - $streamStartHoursOffset - $currentHour) % 6 + $currentHour))
     streamEnd=$(($finishHour)):59:00
     if [ $finishHour -lt $currentHour ]
     then
-        finishDate=$(date -d "1 day" +%Y-%m-%d)
+        finishDate=$(date -u -d "1 day" +%Y-%m-%d)
     else
-        finishDate=$(date +%Y-%m-%d)
+        finishDate=$(date -u +%Y-%m-%d)
     fi
     echo "Creating broadcast from now until $finishDate $streamEnd"
     streamData=$( python3 create-broadcast.py \
@@ -49,7 +49,7 @@ else
     secondsRemaining=$(echo $streamData | jq -r '.timeRemaining')
 fi
 millisecondsRemaining=$(($secondsRemaining * 1000))
-streamLength=$(date -d@$secondsRemaining -u +%H:%M:%S)
+streamLength=$(date -u -d@$secondsRemaining -u +%H:%M:%S)
 
 echo Starting YouTube stream $streamName for $streamLength
 echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
