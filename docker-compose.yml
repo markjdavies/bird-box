@@ -15,7 +15,6 @@ services:
       - auth:/auth
     ports:
       - 80:80
-      - 8080:8080
     restart: unless-stopped
   # syncthing:
   #   image: linuxserver/syncthing:arm32v7-latest
