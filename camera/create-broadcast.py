@@ -166,7 +166,6 @@ if __name__ == "__main__":
   argparser.add_argument("--streamName", help="Name (key) of existing stream to re-use", default="")
   argparser.add_argument("--categoryId", help="Category ID", default="15")
   argparser.add_argument("--auth-path", help="Auth folder path", default="/auth/")
-  # argparser.add_argument("--noauth_local_webserver", help="If browser is on another machine", default=True)
   argparser.add_argument("--dry-run", help="Skip creation and binding of stream and broadcast", default=False)
 
   args = argparser.parse_args()
