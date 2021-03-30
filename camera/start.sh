@@ -1,6 +1,9 @@
 # #!/bin/sh
 vcdbg set awb_mode 0
 
+echo Starting web server
+python3 -m http.server -d /pics 80 > /dev/null 2>&1 &
+
 echo Taking still picture
 modprobe v4l2_common && python3 bird-box.py
 
