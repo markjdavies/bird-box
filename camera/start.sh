@@ -13,7 +13,7 @@ if [ -z "$streamData" ]
 then
     echo "No current broadcast found"
     streamStartHoursOffset=$((${STREAM_START_HOURS_OFFSET:=0} % 6))
-    currentHour=$(($(date +%H) - 1))
+    currentHour=$(date -u +%H)
     finishHour=$(((23 - $streamStartHoursOffset - $currentHour) % 6 + $currentHour))
     streamEnd=$(($finishHour)):59:00
     if [ $finishHour -lt $currentHour ]
@@ -76,6 +76,7 @@ raspivid -o - -t $millisecondsRemaining \
     --awb ${AWB:=greyworld} \
     --rotation ${ROTATION:=0} \
     --roi ${ROI:=0,0,1,1} \
+    --awbg '1.0,1.0' \
 | \
 ffmpeg -re \
     -ar 44100 -ac 2 -acodec pcm_s16le -f s16le -ac 2 -i /dev/zero \
