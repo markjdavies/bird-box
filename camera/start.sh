@@ -76,7 +76,6 @@ raspivid -o - -t $millisecondsRemaining \
     --awb ${AWB:=greyworld} \
     --rotation ${ROTATION:=0} \
     --roi ${ROI:=0,0,1,1} \
-    --awbg '1.0,1.0' \
 | \
 ffmpeg -re \
     -ar 44100 -ac 2 -acodec pcm_s16le -f s16le -ac 2 -i /dev/zero \
