@@ -10,11 +10,11 @@ while True:
   filename = '/pics/birdbox_latest.jpg'
   try:
     with picamera.PiCamera() as camera:
-      picamera.PiCamera.CAPTURE_TIMEOUT = 20 # seconds
+      picamera.PiCamera.CAPTURE_TIMEOUT = 60 # seconds
       camera.resolution = (1280, 720)
       camera.iso = 800
       camera.awb_mode = 'off'
-      camera.awb_gains = (0.95, 0.95)
+      camera.awb_gains = (1.16, 0.928)
       camera.start_preview()
       # Camera warm-up time
       time.sleep(3)
