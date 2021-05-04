@@ -5,18 +5,19 @@ import time
 import picamera
 from datetime import datetime
 from shutil import copyfile
+from ast import literal_eval as make_tuple
 
 while True:
   filename = '/pics/birdbox_latest.jpg'
   try:
     with picamera.PiCamera() as camera:
-      camera.CAPTURE_TIMEOUT = 60 # seconds
-      camera.sensorMode = 3
-      camera.resolution = (3280, 2464)
+      camera.CAPTURE_TIMEOUT = int(os.environ.get('STILL_CAPTURE_TIMEOUT', '60')) # seconds
+      camera.sensorMode = int(os.environ.get('STILL_SENSOR_MODE', '3'))
+      camera.resolution = make_tuple(os.environ.get('STILL_RESOLUTION', '(3280, 2464)'))
       camera.exposure_mode = 'sports'
       camera.iso = 0
       camera.awb_mode = 'off'
-      camera.awb_gains = (1.16, 0.928)
+      camera.awb_gains = make_tuple(os.environ.get('STILL_AWB_GAINS', '(1.16, 0.928)'))
       camera.start_preview()
       # Camera warm-up time
       time.sleep(3)
