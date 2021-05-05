@@ -11,7 +11,8 @@ while True:
   filename = '/pics/birdbox_latest.jpg'
   try:
     with picamera.PiCamera() as camera:
-      camera.CAPTURE_TIMEOUT = int(os.environ.get('STILL_CAPTURE_TIMEOUT', '60')) # seconds
+      # Timeout must be referenced on class not the instance, due to this bug: https://github.com/waveform80/picamera/issues/329
+      picamera.PiCamera.CAPTURE_TIMEOUT = int(os.environ.get('STILL_CAPTURE_TIMEOUT', '60')) # seconds
       camera.sensorMode = int(os.environ.get('STILL_SENSOR_MODE', '3'))
       camera.resolution = make_tuple(os.environ.get('STILL_RESOLUTION', '(3280, 2464)'))
       camera.exposure_mode = 'sports'
