@@ -13,7 +13,7 @@ if [ -z "$streamData" ]
 then
     echo "No current broadcast found"
     streamStartHoursOffset=$((${STREAM_START_HOURS_OFFSET:=0} % 6))
-    currentHour=$(date -u +%H)
+    currentHour=$(date +%H)
     finishHour=$(((23 - $streamStartHoursOffset - $currentHour) % 6 + $currentHour))
     streamEnd=$(($finishHour)):59:00
     if [ $finishHour -lt $currentHour ]
