@@ -16,7 +16,7 @@ while True:
       # set sensor_mode twice, to be sure: https://picamera.readthedocs.io/en/release-1.13/api_camera.html#picamera.PiCamera.sensor_mode
       camera.sensor_mode = int(os.environ.get('STILL_SENSOR_MODE', '3'))
       camera.sensor_mode = int(os.environ.get('STILL_SENSOR_MODE', '3'))
-      camera.resolution = make_tuple(os.environ.get('STILL_RESOLUTION', '(3280, 2464)'))
+      camera.resolution = make_tuple(os.environ.get('STILL_RESOLUTION', '(2592, 1944)'))
       camera.exposure_mode = 'sports'
       camera.iso = 0
       camera.awb_mode = 'off'
