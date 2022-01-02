@@ -1,11 +1,14 @@
-# #!/bin/sh
+#!/bin/sh
 vcdbg set awb_mode 0
 
 echo Starting web server
 python3 -m http.server -d /pics 80 > /dev/null 2>&1 &
 
+echo listing drivers
+lsmod
+
 echo Taking still picture
-modprobe v4l2_common && python3 bird-box.py
+modprobe v4l2_mem2mem && python3 bird-box.py
 
 # streamData=$(python3 getCurrentStream.py)
 
@@ -14,9 +17,9 @@ then
     echo "No current broadcast found"
     streamStartHoursOffset=$((${STREAM_START_HOURS_OFFSET:=0} % 6))
     currentHour=$(date +%H)
-    finishHour=$(((23 - $streamStartHoursOffset - $currentHour) % 6 + $currentHour))
-    streamEnd=$(($finishHour)):59:00
-    if [ $finishHour -lt $currentHour ]
+    finishHour=$(((23 - streamStartHoursOffset - currentHour) % 6 + currentHour))
+    streamEnd=$((finishHour)):59:00
+    if [ $finishHour -lt "$currentHour" ]
     then
         finishDate=$(date -d "1 day" +%Y-%m-%d)
     else
@@ -28,36 +31,36 @@ then
         --privacy-status "${PRIVACY_STATUS:=public}"  \
         --stream-title "Nesting Box Stream" \
         --description "Oxfordshire, UK - ${BALENA_RELEASE_HASH}" \
-        --streamId ${FIXED_STREAM_ID} \
-        --streamName ${FIXED_STREAM_NAME} \
+        --streamId "${FIXED_STREAM_ID}" \
+        --streamName "${FIXED_STREAM_NAME}" \
         --end-time "$finishDate $streamEnd" \
     )
-    echo $streamData
-    errorMessage=$(echo $streamData | jq '.error.message')
+    echo "$streamData"
+    errorMessage=$(echo "$streamData" | jq '.error.message')
     if [ "$errorMessage" = "null" ]
     then
         echo Success
         echo "[$streamData]" > /schedule/streams.json
-        streamName=$(echo $streamData | jq -r '.streamName')
-        secondsRemaining=$(echo $streamData | jq -r '.timeRemaining')
+        streamName=$(echo "$streamData" | jq -r '.streamName')
+        secondsRemaining=$(echo "$streamData" | jq -r '.timeRemaining')
     else
-        echo $errorMessage
+        echo "$errorMessage"
         echo Trying default stream
         streamName=${YOU_TUBE_API_KEY}
         secondsRemaining=21540
     fi
 else
     echo 'Found scheduled broadcast'
-    echo $streamData
-    streamName=$(echo $streamData | jq -r '.streamName')
-    secondsRemaining=$(echo $streamData | jq -r '.timeRemaining')
+    echo "$streamData"
+    streamName=$(echo "$streamData" | jq -r '.streamName')
+    secondsRemaining=$(echo "$streamData" | jq -r '.timeRemaining')
 fi
-millisecondsRemaining=$(($secondsRemaining * 1000))
+millisecondsRemaining=$((secondsRemaining * 1000))
 streamLength=$(date -d@$secondsRemaining -u +%H:%M:%S)
 
-echo Starting YouTube stream $streamName for $streamLength
-echo Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}
-echo Region of interest: $ROI
+echo "Starting YouTube stream $streamName for $streamLength"
+echo "Exposure settings: br: ${BRIGHTNESS:=70} contrast: ${CONTRAST:=75} ISO: ${ISO:=800} ev: ${EV:=0}"
+echo "Region of interest: $ROI"
 
 echo Starting YouTube stream
 raspivid -o - -t $millisecondsRemaining \
