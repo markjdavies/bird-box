@@ -1,1 +1,5 @@
 picamera
+PyJWT
+google-api-python-client
+python-dateutil
+oauth2client
